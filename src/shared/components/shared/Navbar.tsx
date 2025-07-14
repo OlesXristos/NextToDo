@@ -17,7 +17,7 @@ const Navbar = async () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Image src="/todo.png" alt="Logo" width={40} height={40} />
+              <Image src="/toDo.png" alt="Logo" width={40} height={40} />
               <div>
                 <h2 className="text-3xl font-black">Mira</h2>
                 <p className="text-base text-gray-400 leading-3">Do your things</p>
