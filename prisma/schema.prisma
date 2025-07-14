@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+ 
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username      String @unique
+  name     String? @unique
+  bio      String?
+  image    String?
+  location String?
+  website  String?
+  clerkId      String @unique
+  email     String  @unique
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+tasks   Task[]
+  sharedTasks SharedTask[]
+  posts    Post[]
+  comments Comment[]
+  likes    Like[]
+  followers Follows[] @relation("following")
+  following Follows[] @relation("follower")
+
+  notifications Notification[] @relation("userNotifications")
+  notificationsCreated Notification[] @relation("notificationCreator")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  authorId  String
+  content   String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+
+  comments  Comment[]
+  likes     Like[]
+  notifications Notification[] 
+}
+model SharedTask {
+  id        String   @id @default(cuid())
+  authorId  String
+  content   String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+
+  comments  Comment[]
+  likes     Like[]
+  notifications Notification[] 
+  status    TaskStatus @default(PENDING)
+}
+
+  model Task{
+  id        String   @id @default(cuid())
+  authorId  String
+  content   String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  
+status    TaskStatus @default(PENDING)
+       
+  }
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String?
+  sharedTaskId   String?
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+sharedTask     SharedTask? @relation(fields: [sharedTaskId], references: [id], onDelete: Cascade)
+  post      Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  notifications Notification[]
+
+  @@index([postId, authorId]) 
+
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String?  
+  sharedTaskId   String?               
+  userId    String                 
+  createdAt DateTime @default(now())
+
+  // Relations
+  sharedTask     SharedTask? @relation(fields: [sharedTaskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId,postId]) // composite index for faster queries
+  @@unique([userId,postId]) // this prevents same user liking post twice
+  @@unique([userId,sharedTaskId])
+}
+
+model Follows {  
+  followerId String
+  followingId String
+  createdAt DateTime @default(now())
+
+  follower   User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following  User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+@@index([followerId, followingId]) // composite index for faster queries
+@@id([followerId, followingId]) // composite unique key preventing duplicate follows
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String                  
+  creatorId String                  
+  type      NotificationType        
+  read      Boolean  @default(false)
+  postId    String? 
+  sharedTaskId   String?                
+  commentId String?                
+  createdAt DateTime @default(now())
+  
+  // Relations
+  sharedTask     SharedTask? @relation(fields: [sharedTaskId], references: [id], onDelete: Cascade)
+  user      User     @relation("userNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  creator   User     @relation("notificationCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+enum NotificationType {
+  LIKE     
+  COMMENT 
+  FOLLOW   
+}
+enum TaskStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
