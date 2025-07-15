@@ -34,7 +34,7 @@ export default async function HomeLayout({
               </div>
 
               {/* Контент */}
-              <div className="order-1 ">
+              <div className="order-1  w-full">
                 <AuroraMotionWrapper>{children}</AuroraMotionWrapper>
               </div>
 
