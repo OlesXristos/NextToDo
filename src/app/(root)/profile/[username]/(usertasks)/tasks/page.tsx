@@ -24,27 +24,37 @@ async function TaskPage({ params }: { params: { username: string } }) {
               value: 'tasks',
               label: 'Tasks',
               icon: <FileTextIcon className="size-4" />,
-              content: tasks.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={{ ...task, type: 'task' }}
-                  dbUserId={user.id}
-                  diaseble
-                />
-              )),
+              content:
+                tasks.length > 0 ? (
+                  tasks.map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={{ ...task, type: 'task' }}
+                      dbUserId={user.id}
+                      diaseble
+                    />
+                  ))
+                ) : (
+                  <p className="text-muted-foreground mt-4 text-center">Завдань ще немає</p>
+                ),
             },
             {
               value: 'sharedTasks',
               label: 'Shared Tasks',
               icon: <FileTextIcon className="size-4" />,
-              content: sharedTasks.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={{ ...task, type: 'sharedTask' }}
-                  dbUserId={user.id}
-                  diaseble
-                />
-              )),
+              content:
+                sharedTasks.length > 0 ? (
+                  sharedTasks.map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={{ ...task, type: 'sharedTask' }}
+                      dbUserId={user.id}
+                      diaseble
+                    />
+                  ))
+                ) : (
+                  <p className="text-muted-foreground mt-4 text-center">Немає спільних завдань</p>
+                ),
             },
           ]}
         />

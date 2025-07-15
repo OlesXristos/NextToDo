@@ -27,19 +27,14 @@ export default async function HomeLayout({
       <div className="min-h-screen relative">
         <main className="py-8">
           <div className="max-w-7xl mx-auto px-4 ">
-            <div
-              className={`grid gap-1 ${
-                user
-                  ? 'xs:[grid-template-columns:65px_3fr] md:grid-cols-[2fr_10fr_3fr]' // додано третю колонку для WhoToFollow
-                  : 'grid-cols-1'
-              }`}>
+            <div className="flex gap-4">
               {/* Sidebar зліва */}
-              <div className="order-2 xs:flex xs:order-1 xs:static fixed bottom-0 left-0 w-full z-10">
+              <div className="order-2 xs:flex xs:order-1 xs:static fixed bottom-0 left-0 w-full xs:w-auto  z-10">
                 <TaskSidebar username={username} />
               </div>
 
               {/* Контент */}
-              <div className="order-1 xs:order-2">
+              <div className="order-1 ">
                 <AuroraMotionWrapper>{children}</AuroraMotionWrapper>
               </div>
 

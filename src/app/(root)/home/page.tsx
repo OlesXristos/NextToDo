@@ -18,8 +18,8 @@ export default async function Home({ params }: { params: { id: string } }) {
 
   return (
     <div
-      className={`grid gap-1 ${
-        user ? 'xs:[grid-template-columns:65px_3fr] md:grid-cols-[2fr_10fr_3fr]' : 'grid-cols-1'
+      className={`grid gap-1  ${
+        user ? ' xs:[grid-template-columns:65px_3fr]  md:grid-cols-[2fr_10fr_3fr]' : 'grid-cols-1'
       }`}>
       <div className="col-span-6 mb-20">
         <TasksTabs

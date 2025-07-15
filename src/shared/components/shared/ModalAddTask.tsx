@@ -68,7 +68,7 @@ export function ModalAddTask() {
         <DialogTrigger asChild>
           <Button className="flex items-center gap-2">
             <CirclePlus />
-            <span className="hidden md:inline">Додати задачу</span>
+            <span className="hidden sm:inline">Додати задачу</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[625px]">
@@ -153,7 +153,7 @@ export function ModalAddTask() {
                         ) : (
                           <>
                             <SendIcon className="size-4 mr-2" />
-                            Post
+                            Add
                           </>
                         )}
                       </>
